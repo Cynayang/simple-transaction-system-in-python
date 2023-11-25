@@ -1,0 +1,271 @@
+import datetime
+import uuid
+import time
+
+print("Loading..........")
+time.sleep(2)
+print("Thanks for waiting")
+time.sleep(1)
+print("Welcome to EzWallet System")
+
+
+def generate_transaction_number():
+    transaction_id = str(uuid.uuid4())
+    return transaction_id
+
+
+def is_alpha_input(input_str):
+    return input_str.isalpha()
+
+
+def show_current_time_and_date():
+    now = datetime.datetime.now()
+    print("Current Date and Time\t\tLocation")
+    print(now.strftime("%Y-%m-%d %I:%M:%S\t\tCabanatuan\tCity"))
+
+
+balance = 10000
+fee = 15
+
+print("1.) Deposit Money ")
+print("2.) Pay Bills and E-load/Cash-In")
+print("3.) Balance Money")
+print("4.) Bank Transfer")
+print("5.) Exit ")
+
+while True:
+    option = input("\nSELECT TRANSACTION (1/2/3/4/5): ")
+    if option == '1':
+        while True:
+            try:
+                user = input("Enter Account Name: ")
+                if is_alpha_input(user):
+                    print()
+                    break
+                else:
+                    print("Invalid input. Please enter a Account Name without numbers or characters in it.")
+                    continue
+            except ValueError:
+                print("Try again")
+
+        while True:
+            try:
+                amount = float(input("Enter the amount you want to deposit: "))
+                print()
+                if amount < 0:
+                    print("Please enter a non-negative number.")
+                    continue
+                if amount <= 100000:
+                    balance += amount
+                    print("Please wait......")
+                    time.sleep(2)
+                    print("Thank you for depositing in EzWallet.")
+                    print("=" * 60)
+                    print("You Deposit amount:", "PHP", amount)
+                    show_current_time_and_date()
+                    transaction_number = generate_transaction_number()
+                    print("Transaction Number:", transaction_number)
+                    print("=" * 60)
+                    break
+                elif amount > 100000:
+                    print("The amount limit is PHP 100,000")
+                    time.sleep(1)
+                    print("Enter lower or equal to PHP 100,000")
+            except ValueError:
+                print("Invalid input. Please enter a valid numeric value.")
+                print("=" * 60)
+                print()
+    elif option == '2':
+        while True:
+            print()
+            print("1.) Pay Bills ")
+            print("2.) E-load/Cash-In")
+            service = input("\nPlease select services (1/2):").upper()
+            if service == '1':
+                while True:
+                    try:
+                        biller = input("Enter Biller account name:")
+                        if is_alpha_input(biller):
+                            print()
+                            break
+                        else:
+                            print("Invalid input. Please enter biller account name without numbers.")
+                            continue
+                    except ValueError:
+                        print("Try Again")
+                while True:
+                    try:
+                        amount = float(input("\nEnter the amount: "))
+                        if amount < 0:
+                            print("Please enter a non-negative number.")
+                            break
+                        if amount > 100000:
+                            print("The pay limit is PHP 100,000")
+                            time.sleep(1)
+                            print("Enter lower or equal to PHP 100,000")
+                            continue
+                        elif balance > 0:
+                              balance -= amount
+                              time.sleep(1)
+                              print("Please wait.....")
+                              time.sleep(2)
+                              print("*" * 60)
+                              print("You paid with the amount of:", "PHP:", amount, "To:", biller, "\tCurrent Balance:"
+                              , "PHP", balance)
+                              print("=" * 60)
+                              show_current_time_and_date()
+                              transaction_number = generate_transaction_number()
+                              print("Transaction Number:", transaction_number)
+                              print("=" * 60)
+                              break
+                        else:
+                            print("Please wait......")
+                            time.sleep(2)
+                            print("Insufficient Amount!")
+                            break
+                    except ValueError:
+                            print("Invalid input. Please enter a valid numeric value.")
+            elif service == '2':
+                while True:
+                    try:
+                        load = float(input("Enter the exact Load amount: "))
+                        if load < 0:
+                            print("Please enter a non-negative number.")
+                            break
+                        elif load > 900:
+                            print("The load limit is PHP 900")
+                            time.sleep(1)
+                            print("Enter lower or equal to PHP 900")
+                            continue
+                        else:
+                            break
+                    except ValueError:
+                        print("Enter a valid numeric number")
+                while True:
+                    try:
+                        telecom = input("\nPlease Enter Ph Telecom Provider (1-6): ")
+                        print("1.) Smart")
+                        print("2.) Tm")
+                        print("3.) Globe")
+                        print("4.) Gomo")
+                        print("5.) TalkNText")
+                        print("6.) Dito")
+                        sim = int(telecom)
+                        if 1 <= sim <= 6:
+                            if sim == 1:
+                                sim = "Smart"
+                            elif sim == 2:
+                                sim = "TM"
+                            elif sim == 3:
+                                sim = "Globe"
+                            elif sim == 4:
+                                sim = "Gomo"
+                            elif sim == 5:
+                                sim = "TalkNText"
+                            elif sim == 6:
+                                sim = "Dito"
+                            else:
+                                print("Unknown telecom provider. Please select 1-6.")
+                            break
+                        else:
+                            print("\nUnknown telecom provider. Please select 1-6.")
+                    except ValueError:
+                        print("Invalid input. Please enter a number between 1-6.")
+                while True:
+                    try:
+                        user_input = input("Enter an 11-digit Ph telecom number : ")
+                        if len(user_input) == 11 and user_input.isdigit():
+                            num1 = int(user_input)
+                        else:
+                            print("Invalid phone number. Please enter a valid 11-digit number.")
+                            continue
+                        if balance >= load:
+                            balance -= load
+                            time.sleep(1)
+                            print("Please wait.....")
+                            time.sleep(2)
+                            print("*" * 80)
+                            print("You paid with the amount of:", "PHP:", load, "To:", sim, num1,
+                                  "\tCurrent Balance:", "PHP", balance)
+                            print("=" * 80)
+                            show_current_time_and_date()
+                            transaction_number = generate_transaction_number()
+                            print("Transaction Number:", transaction_number)
+                            print("*" * 80)
+                            break
+                        elif balance < load:
+                            print("Insufficient Amount!")
+                            break
+                    except ValueError:
+                        print("try again")
+            else:
+                print("Invalid option")
+    elif option == '3':
+        print("=" * 60)
+        print("Your Balance is:", "PHP:", balance)
+        print("=" * 60)
+        show_current_time_and_date()
+        transaction_number = generate_transaction_number()
+        print("Transaction Number:", transaction_number)
+        print("=" * 60)
+        continue
+    elif option == '4':
+        try:
+            option = input("Transaction Fee: PHP 15 (Y/N) Do you want to continue?:").upper()
+            if option == 'Y':
+                amount = float(input("Enter the amount you want to transfer: "))
+                try:
+                    if amount < 0:
+                        print("Please enter a non-negative number.")
+                        continue
+                except ValueError:
+                    print("Invalid input. Please enter a valid numeric value.")
+                account = input("Enter a account name:")
+                if is_alpha_input(account):
+                    print()
+                else:
+                    print("Invalid input. Please enter  account name without numbers.")
+                    continue
+                if balance > 100:
+                    balance -= fee + amount
+                    time.sleep(1)
+                    print("Please wait.....")
+                    time.sleep(2)
+                    print("*" * 60)
+                    print("You transferred:", "PHP", amount, "To:", account, "Transaction fee:", fee,
+                          "\tCurrent Balance:", "PHP",
+                          balance)
+                    print("*" * 60)
+                    show_current_time_and_date()
+                    transaction_number = generate_transaction_number()
+                    print("Transaction Number:", transaction_number)
+                    print("=" * 40)
+                    continue
+                elif balance != amount:
+                    print("Please wait......")
+                    time.sleep(2)
+                    print("Insufficient Amount!")
+                    print("Please Try Again.")
+                    continue
+            elif option == "N":
+                print("Bye.")
+            else:
+                print("Select Valid option")
+                break
+        except ValueError:
+            print("Select valid option")
+
+
+    elif option == '5':
+        print("=" * 40)
+        print("Now Exiting.......")
+        time.sleep(2)
+        print("Thank you for your trust in  EzWallet")
+        print("=" * 40)
+        break
+
+    else:
+        print("Invalid option")
+        time.sleep(2)
+        print("Please select valid option only 1-5")
+        continue
